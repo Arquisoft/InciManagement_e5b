@@ -3,14 +3,16 @@ package com.uniovi.kafka;
 import javax.annotation.ManagedBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-/*
+
 
 @ManagedBean
-public class KafkaProducer{
-	private static final Logger logger= Logger.getLogger(KafkaProducer.class);
+public class KafkaProducer{/*
+	private static final Logger logger = Logger.getLogger(KafkaProducer.class);
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 	public void send(String topic, String data) {
@@ -25,5 +27,5 @@ public class KafkaProducer{
 				logger.error("Error on sending message\"" + data + "\", stacktrace" + ex.getMessage());
 			}
 		});
-	}
-}*/
+	}*/
+}
