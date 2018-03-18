@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
+import uo.asw.apacheKafka.producer.KafkaProducer;
 import uo.asw.dbManagement.model.Incidence;
 import uo.asw.reporter.InciReporter;
 
@@ -58,7 +59,9 @@ public class InciManager {
 	 * Envia la incidencia a apache kafka
 	 */
 	private void sendIncidence() {
-
+		String msg = "";						// Mensaje a enviar a traves de Apache Kafka
+		KafkaProducer kp = new KafkaProducer();
+		kp.send("incidences", msg);				// "incidences" es el topic para las incidencias
 	}
 
 }
