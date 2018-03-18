@@ -50,10 +50,6 @@ public class Agent {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getIdentifier() {
 		return identifier;
 	}
