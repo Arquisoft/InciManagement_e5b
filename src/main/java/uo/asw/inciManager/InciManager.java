@@ -23,7 +23,7 @@ public class InciManager {
 	 * la base de datos y la envia a apache kafka. En caso contrario la reporta.
 	 */
 	public void manageIncidence() {
-		if(checkAgent() && checkIncidence()){
+		if(checkAgent()){
 			persistIncidence();
 			sendIncidence();
 		}else{ 
@@ -39,9 +39,6 @@ public class InciManager {
 		return false;
 	}
 
-	private boolean checkIncidence() {
-		return false;
-	}
 
 	/**
 	 * Llama a IncidenceReporter cuando una incidencia es incorrecta
