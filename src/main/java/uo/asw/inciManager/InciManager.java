@@ -2,15 +2,26 @@ package uo.asw.inciManager;
 
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import uo.asw.apacheKafka.producer.KafkaProducer;
+import uo.asw.dbManagement.model.Agent;
 import uo.asw.dbManagement.model.Incidence;
 import uo.asw.reporter.InciReporter;
 
 public class InciManager {
 
+	
 	private Incidence inci;
+	private static final Logger logger = Logger.getLogger(KafkaProducer.class);
 
 	public InciManager(JSONObject jsonInci) {
 		String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -23,8 +34,8 @@ public class InciManager {
 	 * Comprueba si la incidencia realizada es correcta. Si lo es la guarda en
 	 * la base de datos y la envia a apache kafka. En caso contrario la reporta.
 	 */
-	public void manageIncidence() {
-		if(checkAgent()){
+	public void manageIncidence(Agent agent) {
+		if(checkAgent(agent)){
 			persistIncidence();
 			sendIncidence();
 		}else{ 
@@ -36,8 +47,19 @@ public class InciManager {
 	 * Comprueba si el agente que realiza la incidencia esta o no en el sistema.
 	 * Devuelve true si lo esta y false en caso contrario.
 	 */
-	private boolean checkAgent() {
-		return false;
+	private boolean checkAgent(Agent agent) {
+		logger.info("Sending POST request to url http://localhost:8080/agent ");
+		String url = "http://localhost:8090/agent";//Supuesta url desde donde se envían las peticiones
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		JSONObject peticion = new JSONObject();
+		peticion.put("login", agent.getIdentifier());
+        peticion.put("password", agent.getPassword());
+		peticion.put("kind", agent.getKind());
+        HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
+        ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
+        HttpStatus responseCode = response.getStatusCode();
+        return responseCode.equals(HttpStatus.OK);
 	}
 
 
