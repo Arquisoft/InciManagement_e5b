@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import uo.asw.apacheKafka.producer.KafkaProducer;
 import uo.asw.dbManagement.model.Incidence;
 import uo.asw.dbManagement.model.Operator;
 import uo.asw.dbManagement.repositories.AgentsRepository;
@@ -31,9 +32,14 @@ public class IncidenceService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	@Autowired
+	private KafkaProducer kafkaProducer;
+	
 	
 	public void sendCorrectIncidence(Incidence incidence) {
 		incidenceRepository.save(incidence);
+		kafkaProducer.send(incidence.getName(), incidence.getDescription());//javi comprueba esta linea tambien porfa thanks
+		
 	}
 	
 	public boolean isCorrectIncidence(String name,String password,Incidence incidence) {
