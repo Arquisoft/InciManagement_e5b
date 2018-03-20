@@ -25,6 +25,7 @@ public class Agent {
 	
 	@NotNull
 	private String name;
+	private String role="ROLE_AGENT";
 	
 	@NotNull
 	private String email;
@@ -135,6 +136,14 @@ public class Agent {
 		} else if (!identifier.equals(other.identifier))
 			return false;
 		return true;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }

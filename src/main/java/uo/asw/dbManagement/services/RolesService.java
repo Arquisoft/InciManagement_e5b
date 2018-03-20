@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RolesService {
 	
-	String[] roles = {"ROLE_OPERATOR"};
+	String[] roles = {"ROLE_OPERATOR","ROLE_AGENT"};
 		
 	public String[] getRoles() {
 		return roles;
