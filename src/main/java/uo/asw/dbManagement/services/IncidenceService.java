@@ -47,7 +47,7 @@ public class IncidenceService {
 	
 	public void sendCorrectIncidence(Incidence incidence) {
 		incidenceRepository.save(incidence);
-		kafkaProducer.send(incidence.getName(), incidence.getDescription());//javi comprueba esta linea tambien porfa thanks
+		kafkaProducer.send("incidences", incidence.getDescription());//Incidences es el topic para las incidencias(InicManager)
 		
 	}
 	
@@ -57,7 +57,7 @@ public class IncidenceService {
 			return true;
 		}
 		else {
-			//crear informe del error. Javi haz esto lo primero (importante)
+			//crear informe del error.
 			return false;
 		}
 		
@@ -68,7 +68,13 @@ public class IncidenceService {
 	}
 	
 	public boolean agenteExiste(String login) {//hacer una busqueda en busca el agente por id en agentsrepository, ya inyectado arriba
-		return false;
+        //Se podría hacer otra busqueda con usuario y password directamente para el login.
+		Agent agent = agentsRepository.findByLogin(login);
+		if (agent.equals(null)){
+			return false;
+		}
+		return true;
+
 	}
 	
 	
