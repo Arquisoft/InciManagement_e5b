@@ -6,14 +6,23 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import uo.asw.apacheKafka.producer.KafkaProducer;
+import uo.asw.dbManagement.model.Agent;
 import uo.asw.dbManagement.model.Incidence;
 import uo.asw.dbManagement.model.Operator;
 import uo.asw.dbManagement.repositories.AgentsRepository;
@@ -58,7 +67,7 @@ public class IncidenceService {
 		return false;
 	}
 	
-	public boolean agenteExiste() {//hacer una busqueda en busca el agente por id en agentsrepository, ya inyectado arriba
+	public boolean agenteExiste(String login) {//hacer una busqueda en busca el agente por id en agentsrepository, ya inyectado arriba
 		return false;
 	}
 	
