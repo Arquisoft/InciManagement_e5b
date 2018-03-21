@@ -1,8 +1,10 @@
 package uo.asw.dbManagement.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -26,6 +28,7 @@ import uo.asw.apacheKafka.producer.KafkaProducer;
 import uo.asw.dbManagement.model.Agent;
 import uo.asw.dbManagement.model.Incidence;
 import uo.asw.dbManagement.model.Operator;
+import uo.asw.dbManagement.model.Property;
 import uo.asw.dbManagement.repositories.AgentsRepository;
 import uo.asw.dbManagement.repositories.IncidencesRepository;
 import uo.asw.dbManagement.repositories.OperatorsRepository;
@@ -49,8 +52,14 @@ public class IncidenceService {
 	private static final Logger logger = Logger.getLogger(KafkaProducer.class);
 
 	public void sendCorrectIncidence(Incidence incidence) {
-		kafkaProducer.send("incidences", incidence.getDescription());// Incidences es el topic para las
-																		// incidencias(InicManager)
+		kafkaProducer.send("incidences", generarJSON(incidence));// Incidences es el topic para las
+																	// incidencias(InicManager)
+	}
+
+	private String generarJSON(Incidence incidence) {
+		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder();
+		return sb.toString();
 	}
 
 	public boolean manageIncidence(String name, String password, String kind, Incidence incidence) {
@@ -86,6 +95,34 @@ public class IncidenceService {
 
 	private void reportIncidence(Incidence incidence) {
 		InciReporter.reportInci(incidence);
+	}
+
+	public void listIncidence(Incidence incidence, String etiquetas, String propiedades) {
+		// TODO Auto-generated method stub
+		incidence.setTags(procesarString(incidence, etiquetas));
+		incidence.setProperties(procesarPropiedades(procesarString(incidence, propiedades)));
+	}
+	
+	private Set<String> procesarString(Incidence incidence,String x) {
+		Set<String> lista = new HashSet<String>();
+		for(String string : x.split(";")) {
+			lista.add(string);
+		}
+		return lista;
+		
+		
+	}
+	
+	private Set<Property> procesarPropiedades(Set<String>lista){
+		Set<Property> lista2=new HashSet<Property>();
+		for(String s:lista) {
+			String[] temp = s.split(":");
+			if(temp.length==2) {
+				Property pro=new Property(temp[0], temp[1]);
+				lista2.add(pro);
+			}
+		}
+		return lista2;
 	}
 
 }
