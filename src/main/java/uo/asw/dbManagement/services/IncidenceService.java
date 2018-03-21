@@ -1,6 +1,7 @@
 package uo.asw.dbManagement.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -65,7 +66,7 @@ public class IncidenceService {
 		return sb.toString();
 	}
 	
-	private Incidence JSON_To_Inci(String data) {
+	public Incidence JSON_To_Inci(String data) {
 		String identifier="";
 		String login;
 		String password;
@@ -73,9 +74,9 @@ public class IncidenceService {
 		String name;
 		String description="";
 		String location="";
-		Set<String> tags = null;
-		Map<String,Object> additional = null;
-		Set<Property> properties = null;
+		Set<String> tags = new HashSet<>();
+		Map<String,Object> additional = new HashMap<>();
+		Set<Property> properties = new HashSet<>();
 		
 		JSONObject obj= new JSONObject(data);
 		
@@ -88,6 +89,7 @@ public class IncidenceService {
 		location=obj.getString("location");
 		
 		JSONArray jsonTags = obj.getJSONArray("tags");
+		System.out.println(jsonTags.getString(0));
 		for (int i=0; i<jsonTags.length(); i++) {
 		    tags.add(jsonTags.getString(i));
 		}

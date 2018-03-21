@@ -1,0 +1,23 @@
+{
+
+"identifier": "identificadorPrueba",
+
+"login": "usuarioPrueba",
+
+"password": "passwordPrueba",
+
+"kind": "tipoPrueba",
+
+"name": "nombrePrueba",
+
+"description": "descripcionPrueba",
+
+"location": "coordenadasPrueba",
+
+"tags": ["tag1","tag2"],
+
+"additional": [{"nombre":"nombrePrueba", "valor": 5}],
+
+"properties": [{"propiedad":"propiedadPrueba","valor":"valorPrueba"} ]
+
+}
