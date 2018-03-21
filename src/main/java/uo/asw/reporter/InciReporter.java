@@ -6,7 +6,7 @@ public class InciReporter {
 private static final String fileName = "reportLog.log";
 	
 	public static void reportInci(Incidence inci) {
-		String message = "La incidencia " + inci.getDescription() + " no ha podido ser almacenada";
+		String message = "Prueba";
 		Writer.write(fileName, message);
 	}
 }

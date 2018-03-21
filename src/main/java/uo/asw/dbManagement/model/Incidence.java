@@ -10,70 +10,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Incidence {
-	
-	/*	TODO - Quitar
-	 *	Cada incidencia puede contener los siguientes campos: 
-	 *	nombre de usuario y password, 
-	 *	nombre de la incidencia, descripción, localización (se obtendrá automáticamente del dispositivo si es posible), 
-	 *	etiquetas (lista de palabras separadas por comas que permitirán categorizar las incidencias), 
-	 *	información adicional (fotos, vídeos, etc.). 
-	 *	Algunas incidencias podrán también contener una lista de campos con la forma "propiedad/valor", 
-	 *	donde el campo propiedad indica un nombre de propiedad, y el campo valor, indica el valor de dicha propiedad.
-	 *
-	 *	Las incidencias adquirirán un estado (abierta, en proceso, cerrada, anulada) 
-	 *	así como otra información generada por el sistema (persona/entidad asignada para resolver la incidencia), 
-	 *	comentarios sobre la incidencia realizados por los operarios, etc. 
-	 *	Las incidencias también pueden tener una caducidad, por ejemplo, en el caso de las incidencias 
-	 *	que pueda enviar un sensor de temperatura, si se envían cada hora, tendrán una hora de caducidad).
-	 *
-	 * 	Si hay valores de alguna propiedad que los filtros consideran peligroso, se marcará dicha incidencia como peligrosa.
-	 */
-	
+
 	@Id
 	@GeneratedValue
 	private long id;
-	@Column(unique=true) 
+	@Column(unique = true)
 	private String identifier;
-	
-	@ManyToOne
-	@JoinColumn(name="agent_id")
-	private Agent agent;
-	
-	@ManyToOne
-	@JoinColumn(name="operator_id")
-	private Operator operator;
-	
+
+	private String login;
+	private String password;
+	private String kind;
+
+	private String operatorIdentifier;
+
 	private String name;
 	private String description;
 	private String location;
-	
+
 	@ElementCollection
-	@CollectionTable(
-		name="incidence_tags",
-	    joinColumns=@JoinColumn(name="incidence_ID")
-	)
+	@CollectionTable(name = "incidence_tags", joinColumns = @JoinColumn(name = "incidence_ID"))
 	private Set<String> tags;
-	
+
 	@ElementCollection
-	@CollectionTable(
-		name="incidence_properties",
-	    joinColumns=@JoinColumn(name="incidence_ID")
-	)	
+	@CollectionTable(name = "incidence_properties", joinColumns = @JoinColumn(name = "incidence_ID"))
 	private Set<Property> properties = new HashSet<>();
-	
-	//private Map<String, Object> additional;
-	
-	private String status; //open, in process, closed, canceled
+
+	private String status; // open, in process, closed, canceled
 	private String operatorComments;
 	private String expiration;
-	private boolean dangerous;
-	
-	public Incidence() {}
-	
+
+	public Incidence() {
+	}
+
 	public Incidence(String identifier) {
 		this.identifier = identifier;
 	}
@@ -81,21 +52,34 @@ public class Incidence {
 	public long getId() {
 		return id;
 	}
-	public Agent getAgent() {
-		return agent;
+
+	public String getLogin() {
+		return login;
 	}
-	public Incidence setAgent(Agent agent) {
-		this.agent = agent;
+
+	public Incidence setLogin(String login) {
+		this.login = login;
 		return this;
 	}
-	public Operator getOperator() {
-		return operator;
+
+	public String getPassword() {
+		return password;
 	}
-	public Incidence setOperator(Operator operator) {
-		this.operator = operator;
+
+	public Incidence setPassword(String password) {
+		this.password = password;
 		return this;
 	}
-	
+
+	public String getKind() {
+		return kind;
+	}
+
+	public Incidence setKind(String kind) {
+		this.kind = kind;
+		return this;
+	}
+
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -103,25 +87,30 @@ public class Incidence {
 	public String getName() {
 		return name;
 	}
+
 	public Incidence setName(String name) {
 		this.name = name;
 		return this;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public Incidence setDescription(String description) {
 		this.description = description;
 		return this;
 	}
+
 	public String getLocation() {
 		return location;
 	}
+
 	public Incidence setLocation(String location) {
 		this.location = location;
 		return this;
 	}
-	
+
 	public Set<String> getTags() {
 		return tags;
 	}
@@ -134,29 +123,27 @@ public class Incidence {
 	public String getStatus() {
 		return status;
 	}
+
 	public Incidence setStatus(String status) {
 		this.status = status;
 		return this;
 	}
+
 	public String getOperatorComments() {
 		return operatorComments;
 	}
+
 	public Incidence setOperatorComments(String operatorComments) {
 		this.operatorComments = operatorComments;
 		return this;
 	}
+
 	public String getExpiration() {
 		return expiration;
 	}
+
 	public Incidence setExpiration(String expiration) {
 		this.expiration = expiration;
-		return this;
-	}
-	public boolean isDangerous() {
-		return dangerous;
-	}
-	public Incidence setDangerous(boolean dangerous) {
-		this.dangerous = dangerous;
 		return this;
 	}
 
@@ -169,12 +156,27 @@ public class Incidence {
 		return this;
 	}
 
+	public Incidence setIdentifier(String identifier) {
+		this.identifier = identifier;
+		return this;
+	}
+
+	public String getOperatorIdentifier() {
+		return operatorIdentifier;
+	}
+
+	public Incidence setOperatorIdentifier(String operatorIdentifier) {
+		this.operatorIdentifier = operatorIdentifier;
+		return this;
+
+	}
+
 	@Override
 	public String toString() {
-		return "Incidence [id=" + id + ", identifier=" + identifier + ", agent=" + agent + ", operator=" + operator
-				+ ", name=" + name + ", description=" + description + ", location=" + location + ", tags=" + tags
-				+ ", properties=" + properties + ", status=" + status + ", operatorComments=" + operatorComments
-				+ ", expiration=" + expiration + ", dangerous=" + dangerous + "]";
+		return "Incidence [id=" + id + ", identifier=" + identifier + ", login=" + login + ", password=" + password
+				+ ", kind=" + kind + ", operatorIdentifier=" + operatorIdentifier + ", name=" + name + ", description="
+				+ description + ", location=" + location + ", tags=" + tags + ", properties=" + properties + ", status="
+				+ status + ", operatorComments=" + operatorComments + ", expiration=" + expiration + "]";
 	}
 
 	@Override
@@ -201,13 +203,12 @@ public class Incidence {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Permite comparar si esta incidencia y la que se pasa como parametro
-	 * tienen todos sus campos iguales.
-	 * Es distinto del equals, ya que el equals solo compara si las dos incidencias 
-	 * tienen el mismo "identifier", pero este metodo permite realizar pruebas más
-	 * exhaustivas
+	 * tienen todos sus campos iguales. Es distinto del equals, ya que el equals
+	 * solo compara si las dos incidencias tienen el mismo "identifier", pero
+	 * este metodo permite realizar pruebas más exhaustivas
 	 * 
 	 * @param i
 	 * @return
@@ -220,12 +221,10 @@ public class Incidence {
 		if (getClass() != i.getClass())
 			return false;
 
-		if (agent == null) {
-			if (i.agent != null)
+		if (login == null) {
+			if (i.login != null)
 				return false;
-		} else if (!agent.equals(i.agent))
-			return false;
-		if (dangerous != i.dangerous)
+		} else if (!login.equals(i.login))
 			return false;
 		if (description == null) {
 			if (i.description != null)
@@ -252,10 +251,10 @@ public class Incidence {
 				return false;
 		} else if (!name.equals(i.name))
 			return false;
-		if (operator == null) {
-			if (i.operator != null)
+		if (operatorIdentifier == null) {
+			if (i.operatorIdentifier != null)
 				return false;
-		} else if (!operator.equals(i.operator))
+		} else if (!operatorIdentifier.equals(i.operatorIdentifier))
 			return false;
 		if (operatorComments == null) {
 			if (i.operatorComments != null)
@@ -278,10 +277,6 @@ public class Incidence {
 		} else if (!tags.equals(i.tags))
 			return false;
 		return true;
-	}
-
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
 	}
 
 }
