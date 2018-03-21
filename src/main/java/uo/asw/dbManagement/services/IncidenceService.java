@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,57 +29,63 @@ import uo.asw.dbManagement.model.Operator;
 import uo.asw.dbManagement.repositories.AgentsRepository;
 import uo.asw.dbManagement.repositories.IncidencesRepository;
 import uo.asw.dbManagement.repositories.OperatorsRepository;
+import uo.asw.reporter.InciReporter;
 
 @Service
 public class IncidenceService {
-	
+
 	@Autowired
 	private AgentsRepository agentsRepository;
-	
+
 	@Autowired
 	private IncidencesRepository incidenceRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private KafkaProducer kafkaProducer;
-	
-	
+
+	private static final Logger logger = Logger.getLogger(KafkaProducer.class);
+
 	public void sendCorrectIncidence(Incidence incidence) {
-		incidenceRepository.save(incidence);
-		kafkaProducer.send("incidences", incidence.getDescription());//Incidences es el topic para las incidencias(InicManager)
-		
+		kafkaProducer.send("incidences", incidence.getDescription());// Incidences es el topic para las
+																		// incidencias(InicManager)
 	}
-	
-	public boolean isCorrectIncidence(String name,String password,Incidence incidence) {
-		if(loginCorrecto(name,password)) {
+
+	public boolean manageIncidence(String name, String password, String kind, Incidence incidence) {
+		if (loginCorrecto(name, password, kind)) {
+			persistIncidence(incidence);
 			sendCorrectIncidence(incidence);
 			return true;
-		}
-		else {
-			//crear informe del error.
+		} else {
+			reportIncidence(incidence);
 			return false;
 		}
-		
-	}
-	
-	public boolean loginCorrecto(String name,String password) {//Esto lo hago yo Mateo para hacerlo compatible con el login
-		return false;
-	}
-	
-	public boolean agenteExiste(String login) {//hacer una busqueda en busca el agente por id en agentsrepository, ya inyectado arriba
-        //Se podría hacer otra busqueda con usuario y password directamente para el login.
-		Agent agent = agentsRepository.findByLogin(login);
-		if (agent.equals(null)){
-			return false;
-		}
-		return true;
 
 	}
-	
-	
-	
-	
+
+	private void persistIncidence(Incidence incidence) {
+		incidenceRepository.save(incidence);
+	}
+
+	private boolean loginCorrecto(String name, String password, String kind) {
+		logger.info("Sending POST request to url http://localhost:8080/user ");
+		String url = "http://localhost:8080/user"; // Supuesta url desde donde se envían las peticiones
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		JSONObject peticion = new JSONObject();
+		peticion.put("login", name);
+		peticion.put("password", password);
+		peticion.put("kind", kind);
+		HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
+		ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
+		HttpStatus responseCode = response.getStatusCode();
+		return responseCode.equals(HttpStatus.OK);
+	}
+
+	private void reportIncidence(Incidence incidence) {
+		InciReporter.reportInci(incidence);
+	}
 
 }

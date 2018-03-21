@@ -280,4 +280,8 @@ public class Incidence {
 		return true;
 	}
 
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
 }

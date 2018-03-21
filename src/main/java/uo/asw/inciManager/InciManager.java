@@ -34,8 +34,8 @@ public class InciManager {
 	 * Comprueba si la incidencia realizada es correcta. Si lo es la guarda en
 	 * la base de datos y la envia a apache kafka. En caso contrario la reporta.
 	 */
-	public void manageIncidence(Agent agent) {
-		if(checkAgent(agent)){
+	public void manageIncidence() {
+		if(checkAgent()){
 			persistIncidence();
 			sendIncidence();
 		}else{ 
@@ -47,15 +47,15 @@ public class InciManager {
 	 * Comprueba si el agente que realiza la incidencia esta o no en el sistema.
 	 * Devuelve true si lo esta y false en caso contrario.
 	 */
-	private boolean checkAgent(Agent agent) {
-		logger.info("Sending POST request to url http://localhost:8080/agent ");
-		String url = "http://localhost:8090/agent";//Supuesta url desde donde se envían las peticiones
+	private boolean checkAgent() {
+		logger.info("Sending POST request to url http://localhost:8080/user ");
+		String url = "http://localhost:8080/user";//Supuesta url desde donde se envían las peticiones
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_JSON);
 		JSONObject peticion = new JSONObject();
-		peticion.put("login", agent.getIdentifier());
-        peticion.put("password", agent.getPassword());
-		peticion.put("kind", agent.getKind());
+		peticion.put("login", "");		//	Cambiar valor del login -> inci.getLogin()
+        peticion.put("password", "");	//	Cambiar valor del password -> inci.getPassword()
+		peticion.put("kind", "");		//	Cambiar valor del kind -> inci.getKind()
         HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
         ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
         HttpStatus responseCode = response.getStatusCode();

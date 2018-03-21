@@ -1,5 +1,7 @@
 package uo.asw.dbManagement.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +27,15 @@ public class IncidenceController {
 	}
 	
 	@RequestMapping(value="/incidence/add", method=RequestMethod.POST )
-	public String setMark(@ModelAttribute Agent agente,Incidence incidence) {//@ModelAttribute Mark mark){
-		
-		incidenceService.isCorrectIncidence(agente.getName(), agente.getPassword(), incidence);
-		return "redirect:/index";
+	public String setMark(@ModelAttribute Incidence incidence) {//@ModelAttribute Mark mark){
+		String uuid = UUID.randomUUID().toString().replace("-", "");
+		incidence.setIdentifier(uuid);
+		String name="";
+		String password="";
+		String kind="";
+		if(incidenceService.manageIncidence(name,password,kind,incidence))
+			return "redirect:/index";
+		else
+			return "redirect:/incidence/error";	// TODO: completar
 	}
 }
