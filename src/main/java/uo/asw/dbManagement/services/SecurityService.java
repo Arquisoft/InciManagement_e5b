@@ -15,10 +15,10 @@ public class SecurityService {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+	/*
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+	*/
 	private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 	
 	public String findLoggedInDni() {
@@ -28,7 +28,7 @@ public class SecurityService {
 		}
 		return null;
 	}
-	
+	/*
 	public void autoLogin(String dni, String password) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(dni);
 
@@ -40,5 +40,5 @@ public class SecurityService {
 			logger.debug(String.format("Auto login %s successfully!", dni));
 		}
 
-	}
+	}*/
 }

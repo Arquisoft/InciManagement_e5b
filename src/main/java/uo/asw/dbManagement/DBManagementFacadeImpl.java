@@ -18,10 +18,10 @@ public class DBManagementFacadeImpl implements DBManagementFacade{
 	public Incidence getIncidence(Long idIncidence) {
 		return incidencesRepository.findOne(idIncidence);
 	}
-	
+	/*
 	public List<Incidence> getOperatorIncidences(Long idOperator) {
 		return incidencesRepository.getOperatorIncidences(idOperator);
-	}
+	}*/
 
 	public List<Incidence> getIncidencesOfCategory(String[] categories) {
 		
