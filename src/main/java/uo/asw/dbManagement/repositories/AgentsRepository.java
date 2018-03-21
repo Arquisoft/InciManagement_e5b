@@ -10,9 +10,5 @@ public interface AgentsRepository extends CrudRepository<Agent, Long>{
 	@Query("SELECT a FROM Agent a WHERE a.identifier = ?1 and a.password = ?2 and a.kind = ?3")
 	Agent findByLoginPasswordAndKind(String login, String password, String kind);
 	
-	@Query("SELECT a FROM Agent a WHERE a.identifier = ?1")
-	Agent findByLogin(String login);
-	
-	@Query("SELECT a FROM Agent a WHERE a.name = ?1")
-	Agent findByName(String name);
+
 }
