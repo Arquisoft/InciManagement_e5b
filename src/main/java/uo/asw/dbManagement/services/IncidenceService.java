@@ -2,13 +2,16 @@ package uo.asw.dbManagement.services;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,6 +63,69 @@ public class IncidenceService {
 		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
 		return sb.toString();
+	}
+	
+	private Incidence JSON_To_Inci(String data) {
+		String identifier="";
+		String login;
+		String password;
+		String kind;
+		String name;
+		String description="";
+		String location="";
+		Set<String> tags = null;
+		Map<String,Object> additional = null;
+		Set<Property> properties = null;
+		
+		JSONObject obj= new JSONObject(data);
+		
+		identifier= obj.optString("identifier");
+		login=obj.getString("login");
+		password=obj.getString("password");
+		kind=obj.getString("kind");
+		name=obj.getString("name");
+		description=obj.getString("description");
+		location=obj.getString("location");
+		
+		JSONArray jsonTags = obj.getJSONArray("tags");
+		for (int i=0; i<jsonTags.length(); i++) {
+		    tags.add(jsonTags.getString(i));
+		}
+		
+		JSONArray jsonAdditional = obj.getJSONArray("additional");
+		for (int i=0; i<jsonAdditional.length(); i++) {
+		    JSONObject item = jsonAdditional.getJSONObject(i);
+		    String key=item.getString("nombre");
+		    Object value= item.get("valor");
+		    additional.put(key, value);
+		}
+		
+		JSONArray jsonProperties = obj.getJSONArray("properties");
+		for (int i=0; i<jsonProperties.length(); i++) {
+		    JSONObject itemProp = jsonProperties.getJSONObject(i);
+		    String key=itemProp.getString("propiedad");
+		    String value=itemProp.getString("valor");
+		    Property p= new Property(key,value);
+		    properties.add(p);
+		}
+		
+		Agent a= new Agent();
+		a.setIdentifier(login);
+		a.setPassword(password);
+		a.setKind(kind);
+		
+		Incidence inc= new Incidence();
+		inc.setIdentifier(identifier);
+		inc.setName(name);
+		inc.setAgent(a);
+		inc.setLocation(location);
+		inc.setDescription(description);
+		inc.setProperties(properties);
+		inc.setTags(tags);
+		//inc.setAdditional(additional);
+		
+		return inc;
+		
 	}
 
 	public boolean manageIncidence(String name, String password, String kind, Incidence incidence) {
