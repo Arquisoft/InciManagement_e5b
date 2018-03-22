@@ -37,6 +37,6 @@ public class IncidenceController {
 		if (incidenceService.manageIncidence(username, password, kind, incidence))
 			return "redirect:/index";
 		else
-			return "redirect:/incidence/error"; // TODO: completar
+			return "redirect:/error"; // TODO: completar
 	}
 }
