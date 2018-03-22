@@ -52,6 +52,20 @@
 			<version>chargebee-1.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>1.2.5</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-spring</artifactId>
+			<version>1.2.5</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- HyperSQL DB -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
