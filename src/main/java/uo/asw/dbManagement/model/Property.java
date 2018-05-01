@@ -5,18 +5,18 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Property {
 
-		private String property;
+		private String name;
 		private String value;
 				
 		public Property() {}
 		
 		public Property(String property, String value) {
-			this.property=property;
+			this.name=property;
 			this.value=value;
 		}
 
-		public String getProperty() {
-			return property;
+		public String getName() {
+			return name;
 		}
 
 		public String getValue() {
@@ -27,7 +27,7 @@ public class Property {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((property == null) ? 0 : property.hashCode());
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
 			result = prime * result + ((value == null) ? 0 : value.hashCode());
 			return result;
 		}
@@ -41,10 +41,10 @@ public class Property {
 			if (getClass() != obj.getClass())
 				return false;
 			Property other = (Property) obj;
-			if (property == null) {
-				if (other.property != null)
+			if (name == null) {
+				if (other.name != null)
 					return false;
-			} else if (!property.equals(other.property))
+			} else if (!name.equals(other.name))
 				return false;
 			if (value == null) {
 				if (other.value != null)
@@ -56,7 +56,7 @@ public class Property {
 
 		@Override
 		public String toString() {
-			return "Property [property=" + property + ", value=" + value + "]";
+			return "Property [property=" + name + ", value=" + value + "]";
 		}
 		
 }

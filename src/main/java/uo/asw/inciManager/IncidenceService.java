@@ -1,4 +1,4 @@
-package uo.asw.inciManager.services;
+package uo.asw.inciManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,78 +15,75 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import uo.asw.apacheKafka.producer.KafkaProducer;
+import uo.asw.apacheKafka.KafkaProducer;
+import uo.asw.apacheKafka.SendIncidence;
+import uo.asw.dbManagement.SaveIncidence;
 import uo.asw.dbManagement.model.Incidence;
 import uo.asw.dbManagement.model.Property;
-import uo.asw.dbManagement.repositories.IncidencesRepository;
-import uo.asw.reporter.InciReporter;
+import uo.asw.inciReporter.ReportIncidence;
 
 @Service
 public class IncidenceService {
 
 	@Autowired
-	private IncidencesRepository incidenceRepository;
+	private SaveIncidence saveIncidence;
 
 	@Autowired
-	private KafkaProducer kafkaProducer;
+	private SendIncidence sendIncidence;
+	
+	@Autowired
+	private ReportIncidence reportIncidence;
 
 	private static final Logger logger = Logger.getLogger(KafkaProducer.class);
 
-	public void sendIncidence(Incidence incidence) {
-		kafkaProducer.send("incidences", generarJSON(incidence));
-	}
-
 	private String generarJSON(Incidence incidence) {
-		JSONObject json = new JSONObject();
-		json.put("identifier", incidence.getIdentifier());
-		json.put("login", incidence.getLogin());
-		json.put("password", incidence.getPassword());
-		json.put("kind", incidence.getKind());
-		json.put("name", incidence.getName());
-		json.put("description", incidence.getDescription());
-		json.put("location", incidence.getLocation());
-		json.put("tags", incidence.getTags());
-		json.put("properties", incidence.getProperties());
-		json.put("status", incidence.getStatus());
-		json.put("operatorIdentifier", incidence.getOperatorIdentifier());
-		json.put("expiration", incidence.getExpiration());
-
-		return json.toString();
+//		JSONObject json = new JSONObject();
+//		json.put("identifier", incidence.getIdentifier());
+//		json.put("login", incidence.getLogin());
+//		json.put("password", incidence.getPassword());
+//		json.put("kind", incidence.getKind());
+//		json.put("name", incidence.getName());
+//		json.put("description", incidence.getDescription());
+//		json.put("location", incidence.getLocation());
+//		json.put("tags", incidence.getTags());
+//		json.put("properties", incidence.getProperties());
+//		json.put("status", incidence.getStatus());
+//		json.put("operatorIdentifier", incidence.getOperatorIdentifier());
+//		json.put("expiration", incidence.getExpiration());
+//
+//		return json.toString();
+		return "";
 	}
 
 	public boolean manageIncidence(String name, String password, String kind, Incidence incidence) {
 		if (loginCorrecto(name, password, kind)) {
-			persistIncidence(incidence);
-			sendIncidence(incidence);
+			saveIncidence.saveIncidence(incidence);
+			sendIncidence.sendIncidence(generarJSON(incidence));
 			return true;
 		} else {
-			reportIncidence(incidence);
+			reportIncidence.reportIncidence(incidence);
 			return false;
 		}
 	}
 
-	private void persistIncidence(Incidence incidence) {
-		incidenceRepository.save(incidence);
-	}
-
-	private boolean loginCorrecto(String name, String password, String kind) {
+	// TODO - revisar si realiza bien la peticion
+	public boolean loginCorrecto(String login, String password, String kind) {
 		logger.info("Sending POST request to url http://localhost:8080/user ");
 		String url = "http://localhost:8080/user"; // Supuesta url desde donde
 													// se envían las peticiones
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_JSON);
+		
 		JSONObject peticion = new JSONObject();
-		peticion.put("login", name);
+		peticion.put("login", login);
 		peticion.put("password", password);
 		peticion.put("kind", kind);
+		
 		HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
 		ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
 		HttpStatus responseCode = response.getStatusCode();
+		
 		return responseCode.equals(HttpStatus.OK);
-	}
-
-	private void reportIncidence(Incidence incidence) {
-		InciReporter.reportInci(incidence);
 	}
 
 	public void listIncidence(Incidence incidence, String etiquetas, String propiedades) {

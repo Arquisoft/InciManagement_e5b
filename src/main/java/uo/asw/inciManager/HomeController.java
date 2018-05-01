@@ -1,4 +1,4 @@
-package uo.asw.inciManager.controllers;
+package uo.asw.inciManager;
 
 
 import org.springframework.stereotype.Controller;
