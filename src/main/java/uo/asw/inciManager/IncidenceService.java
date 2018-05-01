@@ -79,6 +79,8 @@ public class IncidenceService {
 		peticion.put("password", password);
 		peticion.put("kind", kind);
 		
+		// TODO - MEterlo en un try catch. Si no existe el agente peta!
+		
 		HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
 		ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
 		HttpStatus responseCode = response.getStatusCode();
