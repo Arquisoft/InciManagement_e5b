@@ -128,6 +128,8 @@ public class IncidenceService {
 
 	// TODO - revisar si realiza bien la peticion
 	public boolean loginCorrecto(String login, String password, String kind) {
+		
+		boolean respuesta=false;
 		logger.info("Sending POST request to url http://localhost:8080/user ");
 		String url = "http://localhost:8080/user"; // Supuesta url desde donde
 													// se envían las peticiones
@@ -141,11 +143,16 @@ public class IncidenceService {
 		
 		// TODO - MEterlo en un try catch. Si no existe el agente peta!
 		
+		try {
+		
 		HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
 		ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
 		HttpStatus responseCode = response.getStatusCode();
-		
-		return responseCode.equals(HttpStatus.OK);
+		respuesta=responseCode.equals(HttpStatus.OK);
+		}catch(Exception e) {
+			System.out.println("Agente mal identificado");
+		}
+		return respuesta;
 	}
 
 	private Set<String> procesarString(String field) {
