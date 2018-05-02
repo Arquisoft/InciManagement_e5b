@@ -19,7 +19,7 @@ public class Agent {
 	
 	@NotNull
 	@Column(unique=true)
-	private String identifier;
+	private String identifier; // login
 	
 	@NotNull
 	private String password;

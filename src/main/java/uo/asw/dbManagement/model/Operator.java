@@ -17,10 +17,13 @@ public class Operator {
 	private long id; 
 	@Column(unique=true) 
 	private String identifier;
+	
 	private String name;  
+	
 	private String role = "ROLE_OPERATOR";
 	
 	private String password;
+	
 	@Transient
 	private String passwordConfirm;
 		

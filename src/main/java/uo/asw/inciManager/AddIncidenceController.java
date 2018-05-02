@@ -1,8 +1,5 @@
 package uo.asw.inciManager;
 
-import java.util.HashSet;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import uo.asw.dbManagement.model.Agent;
 import uo.asw.dbManagement.model.Incidence;
-import uo.asw.dbManagement.model.Operator;
-import uo.asw.dbManagement.model.Property;
 
 @Controller
 public class AddIncidenceController{//  implements AddIncidence{ TODO implementar la interfaz !!!!
@@ -35,32 +29,22 @@ public class AddIncidenceController{//  implements AddIncidence{ TODO implementa
 		return "incidence/add";
 	}
 	
-	//TODO . revisar status por si no se marca siemore a true!
 	@RequestMapping(value = "/incidence/add", method = RequestMethod.POST)
 	public String addIncidence(@RequestParam String login,@RequestParam String password,@RequestParam String kind, 
 			@RequestParam String name, @RequestParam String description, @RequestParam String location, 
 			@RequestParam String tags, @RequestParam String properties) {
 		
-				
-		//login=53143423423P
-		Agent a = new Agent();// id=1, identifier=53143423423P
-		Operator o = new Operator();
+		// Se crea la incidencia con los campos del formulario web.
+		Incidence incidence = incidenceService.createIncidence(name, description, location, tags, properties);
 		
-		Incidence incidence = new Incidence(login, a, o, "asda", "asdad", "asdad", new HashSet<String>(), new HashSet<Property>(), "open", "12_12_1996");
-		String uuid = UUID.randomUUID().toString().replace("-", "");
-		incidence.setIdentifier(uuid);
-		System.err.println(incidence);
+		// Si existe el agente, se devuelve a la vista inicial. Si no, a la vista de error.
+		if (incidenceService.manageIncidence(login, password, kind, incidence))
+			return "index";
+		else
+			return "error";
 		
-//		Incidence incidence = new Incidence(uuid);
-
-//		incidenceService.listIncidence(incidence,etiquetas,propiedades);
-//		if (incidenceService.manageIncidence(username, password, kind, incidence))
-//			return "redirect:/index";
-//		else
-//			return "redirect:/error"; // TODO: completar
-		
-		return "index";
 	}
+	
 //
 //	@Override
 //	public String addIncidence(String username, String password, String kind, String etiquetas, String propiedades,
@@ -68,4 +52,5 @@ public class AddIncidenceController{//  implements AddIncidence{ TODO implementa
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
+	
 }

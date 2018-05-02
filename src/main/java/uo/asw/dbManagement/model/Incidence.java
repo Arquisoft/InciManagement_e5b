@@ -101,11 +101,9 @@ public class Incidence {
 	 * @param expiration
 	 * @param dangerous
 	 */
-	public Incidence(String identifier, Agent agent, Operator operator, String name, String description,
+	public Incidence(String identifier, String name, String description,
 			String location, Set<String> tags, Set<Property> properties, String status, String expiration) {
 		this.identifier = identifier;
-		this.agent = agent;
-		this.operator = operator;
 		this.name = name;
 		this.description = description;
 		this.location = location;
