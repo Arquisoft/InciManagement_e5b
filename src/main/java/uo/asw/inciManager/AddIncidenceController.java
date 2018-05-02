@@ -20,8 +20,7 @@ public class AddIncidenceController{//  implements AddIncidence{ TODO implementa
 	@ResponseBody()
 	@RequestMapping("/prueba")
 	public String prueba() {
-		
-		return "" + incidenceService.loginCorrecto("31668313G", "1234", "Person");
+		return "" + incidenceService.loginCorrecto("A58818501", "11234", "Entity");
 	}
 	
 	@RequestMapping(value = "/incidence/add")
