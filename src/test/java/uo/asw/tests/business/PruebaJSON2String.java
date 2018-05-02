@@ -39,14 +39,14 @@ public class PruebaJSON2String {
 			+ "\"operatorIdentifier\":\"12345\","
 			+ "\"description\":\"Incendio pequeño\","
 			+ "\"location\":\"+10.1,-15.66\","
-			+ "\"expiration\":\"2019-12-30 12:32:11\""
+			+ "\"expiration\":\"2019-12-30 12:32:11\","
 			+ "\"login\":\"Manuel\","
 			+ "\"properties\":["
-			+ "{\"temperatura\":\"100\"},"
-			+ "{\"humedad\":\"0\"}"
+			+ "{\"name\":\"temperatura\",\"value\":\"100\"},"
+			+ "{\"name\":\"humedad\",\"value\":\"0\"}"
 			+ "],"
 			+ "\"tags\":[\"tag1\",\"tag2\"],"
-			+ "\"status\":\"open\","
+			+ "\"status\":\"open\""
 		+ "}";
 	
 	@Test
