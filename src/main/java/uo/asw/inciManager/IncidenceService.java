@@ -49,7 +49,7 @@ public class IncidenceService {
 
 	private static final Logger logger = Logger.getLogger(KafkaProducer.class);
 
-	private String generarJSON(Incidence incidence) {
+	public String generarJSON(Incidence incidence) {
 		JSONObject json = new JSONObject();
 
 		json.put("identifier", incidence.getIdentifier());
@@ -114,7 +114,7 @@ public class IncidenceService {
 	private String operatorIdentifier1 = ""; // TODO !!
 	private String operatorIdentifier2 = ""; // TODO !!
 
-	public Operator getBestOperator() {
+	private Operator getBestOperator() {
 		String operatorIdentifier;
 
 		if (operatorSelector % 2 == 0) {
