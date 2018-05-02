@@ -32,20 +32,21 @@ public class PruebaJSON2String {
 	private IncidenceService incidenceService;
 
  	String json = "{"
-			+ "\"identifier\": \"AOU123\","
-			+ "\"login\": \"Manuel\","
-			+ "\"password\": \"lnoi\","
-			+ "\"kind\": \"Person\","
-			+ "\"name\": \"Incendio\","
-			+ "\"description\": \"Incendio pequeño\","
-			+ "\"location\": \"+10.1,-15.66\","
-			+ "\"tags\": [\"tag1\",\"tag2\"],"
-			+ "\"properties\": ["
-			+ "{\"temperatura\": \"100\"},"
-			+ "{\"humedad\": \"0\"}"
+			+ "\"identifier\":\"AOU123\","
+			+ "\"password\":\"lnoi\","
+			+ "\"kind\":\"Person\","
+			+ "\"name\":\"Incendio\","
+			+ "\"operatorIdentifier\":\"12345\","
+			+ "\"description\":\"Incendio pequeño\","
+			+ "\"location\":\"+10.1,-15.66\","
+			+ "\"expiration\":\"2019-12-30 12:32:11\""
+			+ "\"login\":\"Manuel\","
+			+ "\"properties\":["
+			+ "{\"temperatura\":\"100\"},"
+			+ "{\"humedad\":\"0\"}"
 			+ "],"
-			+ "\"status\": \"open\","
-			+ "\"expiration\": \"2019-12-30 12:32:11\""
+			+ "\"tags\":[\"tag1\",\"tag2\"],"
+			+ "\"status\":\"open\","
 		+ "}";
 	
 	@Test
@@ -72,8 +73,7 @@ public class PruebaJSON2String {
 		i.setOperator(o);
 		i.setExpiration("2019-12-30 12:32:11");
 		
-		assertEquals(json, incidenceService.generarJSON(i));
+		assertEquals(incidenceService.generarJSON(i), json);
 	}
-
 	
 }
