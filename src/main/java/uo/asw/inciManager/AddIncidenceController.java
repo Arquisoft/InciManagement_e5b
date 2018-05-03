@@ -5,23 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import uo.asw.dbManagement.model.Incidence;
 
 @Controller
-public class AddIncidenceController{//  implements AddIncidence{ TODO implementar la interfaz !!!!
+public class AddIncidenceController implements AddIncidence{
 
 	@Autowired
 	private IncidenceService incidenceService;
-	
-	
-	//TODO quitar
-	@ResponseBody()
-	@RequestMapping("/prueba")
-	public String prueba() {
-		return "" + incidenceService.loginCorrecto("A58818501", "1112234", "Entity");
-	}
 	
 	@RequestMapping(value = "/incidence/add")
 	public String addIncidence() {
@@ -43,13 +34,6 @@ public class AddIncidenceController{//  implements AddIncidence{ TODO implementa
 			return "error";
 		
 	}
-	
-//
-//	@Override
-//	public String addIncidence(String username, String password, String kind, String etiquetas, String propiedades,
-//			Incidence incidence) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+
 	
 }

@@ -71,7 +71,7 @@ public class IncidenceService {
 	public Incidence createIncidence(String name, String description, String location, String tagsWeb,
 			String propertiesWeb) {
 
-		String uuid = UUID.randomUUID().toString().replace("-", "");
+		String identifier = IdentifierGenerator.getIdentifier();
 		Set<String> tags = procesarString(tagsWeb);
 		Set<Property> properties = procesarPropiedades(propertiesWeb);
 
@@ -81,7 +81,7 @@ public class IncidenceService {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String caducidad = formatter.format(fechaCaducidad);
 
-		return new Incidence(uuid, name, description, location, tags, properties, "open", caducidad);
+		return new Incidence(identifier, name, description, location, tags, properties, "open", caducidad);
 	}
 
 	public boolean manageIncidence(String login, String password, String kind, Incidence incidence) {
@@ -89,7 +89,7 @@ public class IncidenceService {
 		if (loginCorrecto(login, password, kind)) {
 			// Si el agente existe, se obtiene una referenia a el de la BD y se asocia con
 			// la incidencia
-			incidence.setAgent(getAgent.getAgent(login)); // TODO !
+			incidence.setAgent(getAgent.getAgent(login));
 
 			// Se recupera un operario de la BD y se asocia con la incidencia
 			incidence.setOperator(getBestOperator());
@@ -111,8 +111,8 @@ public class IncidenceService {
 	// Variable para seleccionar el operador al que se le asigna la incidencia
 	private static int operatorSelector = 0;
 	// Identificadores de los operarios a los que se les asignan las incidencias
-	private String operatorIdentifier1 = ""; // TODO !!
-	private String operatorIdentifier2 = ""; // TODO !!
+	private String operatorIdentifier1 = "99999999A";
+	private String operatorIdentifier2 = "AAAAAAA2";
 
 	private Operator getBestOperator() {
 		String operatorIdentifier;
@@ -128,10 +128,9 @@ public class IncidenceService {
 		return getOperator.getOperator(operatorIdentifier);
 	}
 
-	// TODO - revisar si realiza bien la peticion
 	public boolean loginCorrecto(String login, String password, String kind) {
-
-		logger.info("Sending POST request to url http://localhost:8080/user ");
+		logger.info("Sending POST request to url http://localhost:8080/user with this data: [login: " + login
+				+ ", password: " + password + ", kind: " + kind + "]");
 		String url = "http://localhost:8080/user"; // Supuesta url desde donde
 		// se envían las peticiones
 		HttpHeaders header = new HttpHeaders();
@@ -143,11 +142,11 @@ public class IncidenceService {
 		peticion.put("kind", kind);
 
 		try {
-
 			HttpEntity<String> entity = new HttpEntity<String>(peticion.toString(), header);
 			ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, entity, String.class);
 			HttpStatus responseCode = response.getStatusCode();
 			return responseCode.equals(HttpStatus.OK);
+
 		} catch (HttpClientErrorException e) {
 			return false;
 		}

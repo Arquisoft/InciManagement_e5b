@@ -19,7 +19,7 @@ public class ReportIncidenceImpl implements ReportIncidence {
 		
 		try {
 			writer = new PrintWriter(new FileWriter(fileName, true));
-		    writer.println(incidence);
+		    writer.println("ERROR sending incidence. The agent doesn't exist. Incidence data: " + incidence);
 		} catch (IOException e) {
 		   System.err.println("Writter error");
 		} finally {
