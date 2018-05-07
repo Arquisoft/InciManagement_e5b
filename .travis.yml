@@ -24,6 +24,7 @@ before_script:
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
 script: 
-- nohup bash -c "cd hsqldb/bin && ./runServer.sh &"
+- cd hsqldb/bin
+- nohup bash -c "./runServer.sh &"
 - sleep 3
 - "mvn test"
