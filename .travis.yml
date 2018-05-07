@@ -25,4 +25,5 @@ before_script:
 - sleep 3 # give xvfb some time to start
 script: 
 - nohup bash -c "cd hsqldb/bin && ./runServer.sh &"
+- sleep 60
 - "mvn test"
