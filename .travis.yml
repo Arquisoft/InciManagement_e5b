@@ -26,5 +26,6 @@ before_script:
 script: 
 - cd hsqldb/bin
 - nohup bash -c "./runServer.sh &"
+- cd ../..
 - sleep 3
 - "mvn test"
