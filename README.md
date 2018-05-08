@@ -30,4 +30,3 @@ Para ejecutar el proyecto:
  8. Arrancar Manager
    * Ejecutar el siguiente comando, estando situado en la carpeta InciManager_e5b: ``mvn spring-boot:run``
  9. Acceder a localhost:8090/incidence/add
-
