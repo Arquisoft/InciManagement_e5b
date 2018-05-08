@@ -23,9 +23,6 @@ before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
-script: 
-- cd hsqldb/bin
-- nohup bash -c "./runServer.sh &"
-- cd ../..
-- sleep 3
+script:
+- nohup bash -c "cd hsqldb/bin && ./runServer.sh &"
 - "mvn test"
